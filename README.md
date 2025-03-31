@@ -112,7 +112,7 @@ The **Quality Metric** formula is inspired by the paper:
 
 The formula is:
 
-**Quality Metric = (k / n) * k_approximate**
+**Quality Metric = k / (n * k_approximate)**
 
 Where:
 - **k** = Number of relevant results retrieved.
