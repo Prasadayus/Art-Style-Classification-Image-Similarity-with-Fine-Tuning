@@ -63,9 +63,11 @@ The goal of this project is to demonstrate the application of **deep learning** 
 - The **National Gallery of Art dataset** was used to extract features from artwork images.
 - **ResNet** and **EfficientNet** were fine-tuned for feature extraction.
 - The images were then processed using **Cosine Similarity** or **Euclidean Distance** to find the most similar paintings.
+
 #### Preprocessing
 
 The preprocessing steps for the National Gallery of Art dataset are provided in the `nga_dataset_preparation.ipynb` notebook.
+
 ---
 
 ## Evaluation Methods
@@ -110,14 +112,12 @@ The **Quality Metric** formula is inspired by the paper:
 
 The formula is:
 
-\[
-Quality\_Metric = \frac{k}{n} \times k_{approximate}
-\]
+**Quality Metric = (k / n) * k_approximate**
 
 Where:
-- \( k \) = Number of relevant results retrieved.
-- \( n \) = Total number of retrieved images.
-- \( k_{approximate} \) = Approximate number of relevant results.
+- **k** = Number of relevant results retrieved.
+- **n** = Total number of retrieved images.
+- **k_approximate** = Approximate number of relevant results.
 
 This metric helps evaluate the overall retrieval quality by considering the number of relevant images retrieved and their approximate relevance.
 
