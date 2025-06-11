@@ -14,11 +14,12 @@ In this project, we fine-tuned pre-trained deep learning models (**ResNet** and 
 
 ## Key Features
 
-### Dataset 1: **WikiArt (Style Classification)**
+### Dataset 1: **WikiArt (Feature Learning for Transfer)**
 
-- **Task**: Classify artwork images into predefined art styles.
+- **Task**: Used for fine-tuning deep learning models (ResNet and EfficientNet) to learn robust and generalizable visual features from a large and diverse collection of artwork images.  
+  The primary goal  enable effective feature extraction that can be transferred to other datasets for image similarity tasks.
 - **Preprocessing**: The WikiArt dataset was filtered to include only styles that had between **2000** and **5000** images for balanced training.
-- **Model**: Fine-tuned **ResNet** and **EfficientNet** models to classify images based on style.  
+- **Model**: Fine-tuned **ResNet** and **EfficientNet** models to extract transferable features from artwork images.  
 **Source**: The WikiArt dataset is publicly available on Kaggle. You can find the dataset [here](https://www.kaggle.com/datasets/simolopes/wikiart-all-artpieces).
 
 ### Dataset 2: **National Gallery of Art (Image Similarity)**
