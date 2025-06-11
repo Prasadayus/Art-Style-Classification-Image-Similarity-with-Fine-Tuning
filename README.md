@@ -1,14 +1,14 @@
 # Art-Style-Classification-Image-Similarity-with-Fine-Tuning
 
-# Art Style Classification & Image Similarity with Fine-Tuning
-
 ## Overview
-This project involves fine-tuning pre-trained models, specifically **ResNet** and **EfficientNet**, for two distinct tasks:
+This project is an implementation of the research paper  
+**"A Deep Learning Approach for Painting Retrieval based on Genre Similarity"**  
+by Tess Masclef, Mihaela Scuturici, Benjamin Bertin, Vincent Barrellon, Vasile-Marian Scuturici, and Serge Miguet.  
+You can access the original paper [here](https://link.springer.com/chapter/10.1007/978-3-031-51026-7_24).
 
-1. **Style Classification** using the WikiArt dataset to classify artwork images into predefined styles.
-2. **Image Similarity** using the National Gallery of Art dataset to find similar paintings (e.g., portraits with similar faces or poses).
+With the rapid digitization of art collections, there is a growing need for automated tools to retrieve visually or semantically similar paintings from large databases. Manual search is inefficient and subjective, especially as collections grow. Deep learning enables the extraction of robust, high-level features from images, making it possible to compare and retrieve similar artworks efficiently and objectively.
 
-The goal of this project is to demonstrate the application of **deep learning** for both **image classification** and **similarity tasks** on artwork images, leveraging **fine-tuning** on pre-trained models to improve performance on these tasks.
+In this project, we fine-tuned pre-trained deep learning models (**ResNet** and **EfficientNet**) on the large and diverse WikiArt dataset to learn generalizable visual features for artworks. These models were then applied to the National Gallery of Art (NGA) dataset for image similarity retrieval, as the NGA dataset is too small for effective model training. We developed a full pipeline for preprocessing, feature extraction, similarity search, and evaluation. The NGA dataset was carefully preprocessed (see `nga_dataset_preparation.ipynb`) to ensure data quality, which included removing corrupted, duplicate, or low-quality images and standardizing metadata. This necessary step further reduced the dataset size, reinforcing the need for transfer learning from WikiArt.
 
 ---
 
@@ -18,20 +18,36 @@ The goal of this project is to demonstrate the application of **deep learning** 
 
 - **Task**: Classify artwork images into predefined art styles.
 - **Preprocessing**: The WikiArt dataset was filtered to include only styles that had between **2000** and **5000** images for balanced training.
-- **Model**: Fine-tuned **ResNet** and **EfficientNet** models to classify images based on style.
+- **Model**: Fine-tuned **ResNet** and **EfficientNet** models to classify images based on style.  
 **Source**: The WikiArt dataset is publicly available on Kaggle. You can find the dataset [here](https://www.kaggle.com/datasets/simolopes/wikiart-all-artpieces).
-    
+
 ### Dataset 2: **National Gallery of Art (Image Similarity)**
 
-- **Task**: Find similar artworks based on feature representations extracted using pre-trained models.
-- **Preprocessing**: The National Gallery of Art dataset was used to extract high-level features from paintings, and cosine similarity  was used to evaluate image similarity.
-**Source**: The National Gallery of Art dataset is available on the official GitHub repository. You can access it [here](https://github.com/NationalGalleryOfArt/opendata).  
+- The **National Gallery of Art dataset** was used to extract features from artwork images.
+- **ResNet** and **EfficientNet** were fine-tuned for feature extraction.
+- The images were then processed using **Cosine Similarity** or **Euclidean Distance** to find the most similar paintings.
+
+#### Preprocessing
+
+The preprocessing steps for the National Gallery of Art dataset are detailed in the `nga_dataset_preparation.ipynb` notebook.  
+Due to preprocessing—such as removing corrupted, duplicate, or low-quality images, and ensuring consistent metadata—the final usable dataset from the National Gallery of Art is significantly smaller. This reduction in data volume is necessary to maintain data quality and integrity for deep learning tasks, but it also means the dataset is not large enough for effective model training or fine-tuning. As a result, models are fine-tuned on the larger WikiArt dataset and then used for feature extraction and similarity retrieval on the NGA dataset.
+
+---
+
+## Rationale for Fine-Tuning on WikiArt and Applying to the NGA Dataset
+
+- The National Gallery of Art (NGA) dataset contains a limited number of images, which is insufficient for training or fine-tuning deep neural networks effectively.
+- The WikiArt dataset is significantly larger and more diverse, making it suitable for fine-tuning deep learning models to learn generalizable visual features relevant to artworks.
+- By fine-tuning on WikiArt, the model acquires rich and transferable representations of artistic images.
+- These learned features are then applied to the NGA dataset for image similarity retrieval, enabling effective performance despite the limited data available in NGA.
+- This transfer learning approach is supported by established practices in deep learning and is reflected in the workflow and data analysis in the provided Jupyter notebooks, particularly `nga_dataset_preparation.ipynb`.
+
 ---
 
 ## Models Used
 
-- **ResNet**: Fine-tuned on the WikiArt dataset for style classification.
-- **EfficientNet**: Fine-tuned on the WikiArt dataset for style classification.
+- **ResNet**: Fine-tuned on the WikiArt dataset for feature extraction.
+- **EfficientNet**: Fine-tuned on the WikiArt dataset for feature extraction.
 
 ---
 
@@ -66,7 +82,8 @@ The goal of this project is to demonstrate the application of **deep learning** 
 
 #### Preprocessing
 
-The preprocessing steps for the National Gallery of Art dataset are provided in the `nga_dataset_preparation.ipynb` notebook.
+The preprocessing steps for the National Gallery of Art dataset are detailed in the `nga_dataset_preparation.ipynb` notebook.  
+Due to preprocessing—such as removing corrupted, duplicate, or low-quality images, and ensuring consistent metadata—the final usable dataset from the National Gallery of Art is significantly smaller. This reduction in data volume is necessary to maintain data quality and integrity for deep learning tasks, but it also means the dataset is not large enough for effective model training or fine-tuning. As a result, models are fine-tuned on the larger WikiArt dataset and then used for feature extraction and similarity retrieval on the NGA dataset.
 
 ---
 
