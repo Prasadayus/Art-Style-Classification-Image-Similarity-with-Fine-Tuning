@@ -26,7 +26,7 @@ In this project, we fine-tuned pre-trained deep learning models (**ResNet** and 
 
 - The **National Gallery of Art dataset** was used to extract features from artwork images.
 - **ResNet** and **EfficientNet** were fine-tuned for feature extraction.
-- The images were then processed using **Cosine Similarity** or **Euclidean Distance** to find the most similar paintings.
+- The images were then processed using **Cosine Similarity** and **Angular Distance** to find the most similar paintings.
 
 #### Preprocessing
 
@@ -79,7 +79,7 @@ Due to preprocessing—such as removing corrupted, duplicate, or low-quality ima
 
 - The **National Gallery of Art dataset** was used to extract features from artwork images.
 - **ResNet** and **EfficientNet** were fine-tuned for feature extraction.
-- The images were then processed using **Cosine Similarity** or **Euclidean Distance** to find the most similar paintings.
+- The images were then processed using **Cosine Similarity** and **Angular Distance** to find the most similar paintings.
 
 #### Preprocessing
 
