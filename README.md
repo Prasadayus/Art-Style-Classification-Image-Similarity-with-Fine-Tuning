@@ -8,139 +8,123 @@ You can access the original paper [here](https://link.springer.com/chapter/10.10
 
 With the rapid digitization of art collections, there is a growing need for automated tools to retrieve visually or semantically similar paintings from large databases. Manual search is inefficient and subjective, especially as collections grow. Deep learning enables the extraction of robust, high-level features from images, making it possible to compare and retrieve similar artworks efficiently and objectively.
 
-In this project, we fine-tuned pre-trained deep learning models (**ResNet** and **EfficientNet**) on the large and diverse WikiArt dataset to learn generalizable visual features for artworks. These models were then applied to the National Gallery of Art (NGA) dataset for image similarity retrieval. We developed a full pipeline for preprocessing, feature extraction, similarity search, and evaluation. The NGA dataset was carefully preprocessed (see `nga_dataset_preparation.ipynb`) to ensure data quality, which included removing corrupted, duplicate, or low-quality images and standardizing metadata. This necessary step further reduced the dataset size, reinforcing the need for transfer learning from WikiArt.
+---
+
+## Core Methodology
+
+The project follows a robust transfer learning approach for image retrieval in the artistic domain:
+
+- **Feature Learning on WikiArt:**  
+  Deep learning models are fine-tuned on the large WikiArt dataset. This crucial step ([wikiart-with-transfer-learning.ipynb](wikiart-with-transfer-learning.ipynb)) enables the models to learn generalized visual features relevant to art, such as styles, compositions, and color palettes, making them effective art feature extractors.
+
+- **Transfer Learning to NGA:**  
+  The fine-tuned models are then applied to the NGA dataset. Feature vectors (embeddings) are extracted for each of the **3,039 NGA paintings**. This transfer learning approach is vital because the NGA dataset, while substantial, is not large enough for effective deep model fine-tuning from scratch.
+
+- **High-Speed Similarity Search:**  
+  To ensure real-time query performance, the ANNOY (Approximate Nearest Neighbors Oh Yeah) library is employed. All extracted feature vectors from the NGA dataset are precomputed and indexed offline. At query time, ANNOY efficiently finds the most similar vectors in milliseconds, bypassing slow exhaustive searches.
 
 ---
 
-## Key Features
+## Project Structure
 
-### Dataset 1: **WikiArt (Feature Learning for Transfer)**
-
-- **Task**: Used for fine-tuning deep learning models (ResNet and EfficientNet) to learn robust and generalizable visual features from a large and diverse collection of artwork images.  
-  The primary goal  enable effective feature extraction that can be transferred to other datasets for image similarity tasks.
-- **Preprocessing**: The WikiArt dataset was filtered to include only styles that had between **2000** and **5000** images for balanced training.
-- **Model**: Fine-tuned **ResNet** and **EfficientNet** models to extract transferable features from artwork images.  
-**Source**: The WikiArt dataset is publicly available on Kaggle. You can find the dataset [here](https://www.kaggle.com/datasets/simolopes/wikiart-all-artpieces).
-
-### Dataset 2: **National Gallery of Art (Image Similarity)**
-
-- The **National Gallery of Art dataset** was used to extract features from artwork images.
-- **ResNet** and **EfficientNet** were fine-tuned for feature extraction.
-- The images were then processed using **Cosine Similarity** and **Angular Distance** to find the most similar paintings.
-
-#### Preprocessing
-
-The preprocessing steps for the National Gallery of Art dataset are detailed in the `nga_dataset_preparation.ipynb` notebook.  
-Due to preprocessing—such as removing corrupted, duplicate, or low-quality images, and ensuring consistent metadata—the final usable dataset from the National Gallery of Art is significantly smaller. This reduction in data volume is necessary to maintain data quality and integrity for deep learning tasks, but it also means the dataset is not large enough for effective model training or fine-tuning. As a result, models are fine-tuned on the larger WikiArt dataset and then used for feature extraction and similarity retrieval on the NGA dataset.
+- **wikiart-with-transfer-learning.ipynb:** Fine-tuning ResNet50/EfficientNet on WikiArt for robust art features.
+- **nga dataset preparation.ipynb:** Downloading, filtering, and preprocessing NGA images.
+- **Painiting_similarity_on_NGA_Dataset.ipynb:** Feature extraction, building the search index, and running similarity queries.
 
 ---
 
-## Rationale for Fine-Tuning on WikiArt and Applying to the NGA Dataset
+## Datasets
 
-- The National Gallery of Art (NGA) dataset contains a limited number of images, which is insufficient for training or fine-tuning deep neural networks effectively.
-- The WikiArt dataset is significantly larger and more diverse, making it suitable for fine-tuning deep learning models to learn generalizable visual features relevant to artworks.
-- By fine-tuning on WikiArt, the model acquires rich and transferable representations of artistic images.
-- These learned features are then applied to the NGA dataset for image similarity retrieval, enabling effective performance despite the limited data available in NGA.
-- This transfer learning approach is supported by established practices in deep learning and is reflected in the workflow and data analysis in the provided Jupyter notebooks, particularly `nga_dataset_preparation.ipynb`.
+### 1. WikiArt (for Fine-Tuning)
+- Used to fine-tune models for generalizable art features, not for direct search.
+- [Kaggle WikiArt Dataset](https://www.kaggle.com/datasets/simolopes/wikiart-all-artpieces)
+- **Preprocessing:** Filtered to include only styles with 2,000–5,000 images for balanced training.
 
----
-
-## Models Used
-
-- **ResNet**: Fine-tuned on the WikiArt dataset for feature extraction.
-- **EfficientNet**: Fine-tuned on the WikiArt dataset for feature extraction.
+### 2. National Gallery of Art (NGA)
+- **Source:** NGA Open Data
+- **Final Image Count:** 3,039 paintings (after filtering for "painting" in the classification column and successful downloads)
+- **Note:** The NGA metadata does not provide fine-grained genre/style labels (e.g., "portrait", "landscape"). Only broad type ("painting", "sculpture", etc.) is available.
 
 ---
 
-## Dataset Creation & Preprocessing
+## Workflow
 
-### 1. **WikiArt Dataset (Style Classification)**
+1. **Data Preparation**
+   - Filter `objects.csv` for "painting" in classification.
+   - Merge with image URLs and download images (see `nga dataset preparation.ipynb`).
+   - Preprocess images to a standard size (e.g., 224x224).
 
-#### Filtered Art Styles
-- Images from the WikiArt dataset were filtered for **art styles** that had between **2000** and **5000** images.
-- The dataset was shuffled and split into **training**, **validation**, and **test** sets.
+2. **Feature Extraction & Indexing**
+   - Use fine-tuned ResNet50/EfficientNet to extract feature vectors for all NGA images.
+   - Build an ANNOY index for fast similarity search.
+   - Save feature arrays and index for efficient querying.
 
-#### Dataset Structure
+3. **Similarity Search**
+   - For a query image, extract its feature vector.
+   - Retrieve the top-k most similar paintings using the ANNOY index.
+   - Visualize the query and results, showing angular distance and cosine similarity.
 
-- **Training Set**: 70% of the images.
-- **Validation Set**: 15% of the images.
-- **Test Set**: 15% of the images.
+---
 
-#### Directory Creation
+## Models
 
-- Directories were created for **each art style** to separate images into the appropriate categories.
-- Subdirectories for **train**, **validation**, and **test** sets were created for each style.
+- **ResNet50:** Fine-tuned on WikiArt, used for NGA feature extraction.
+- **EfficientNet:** Fine-tuned on WikiArt, used for NGA feature extraction.
 
-#### Image Copying
-
-- Images were copied into their respective directories based on their art style and split ratio.
-
-### 2. **National Gallery of Art Dataset (Image Similarity)**
-
-- The **National Gallery of Art dataset** was used to extract features from artwork images.
-- **ResNet** and **EfficientNet** were fine-tuned for feature extraction.
-- The images were then processed using **Cosine Similarity** and **Angular Distance** to find the most similar paintings.
-
-#### Preprocessing
-
-The preprocessing steps for the National Gallery of Art dataset are detailed in the `nga_dataset_preparation.ipynb` notebook.  
-Due to preprocessing—such as removing corrupted, duplicate, or low-quality images, and ensuring consistent metadata—the final usable dataset from the National Gallery of Art is significantly smaller. This reduction in data volume is necessary to maintain data quality and integrity for deep learning tasks, but it also means the dataset is not large enough for effective model training or fine-tuning. As a result, models are fine-tuned on the larger WikiArt dataset and then used for feature extraction and similarity retrieval on the NGA dataset.
+Both models are used as fixed feature extractors for the NGA dataset.
 
 ---
 
 ## Evaluation Methods
 
-### Title-Based Metrics
+### Visual and Distance-Based Evaluation
 
-1. **Precision@K**: 
-   - Measures how many retrieved artworks have a similar title to the query artwork.
-   - Evaluates the top **K** retrieved artworks based on their title similarity.
+Since the NGA dataset does not include genre/style labels, evaluation is based on visual inspection and feature-space distance metrics:
 
-2. **Average Precision (AP)**: 
-   - Computes relevance-weighted precision for retrievals, ranking artworks based on their relevance to the query.
+- **Angular Distance:**  
+  \( \text{Angular Distance} = \sqrt{2 \times (1 - \text{Cosine Similarity})} \)  
+  Lower is better (closer in feature space).
 
-### Visual Feature-Based Metrics
+- **Cosine Similarity:**  
+  Higher is better (closer in feature space).
 
-1. **Cosine Similarity**: 
-   - Measures the similarity between image features by calculating the cosine of the angle between feature vectors.
-   - A higher cosine similarity indicates visually more similar images.
+For each query:
+- Average Angular Distance of the top-k results (lower = better).
+- Average Cosine Similarity of the top-k results (higher = better).
+- Standard deviation of both metrics (lower = more consistent retrieval).
 
-2. **Mean Similarity**: 
-   - Computes the average similarity across all retrieved images.
+**Visual Inspection:** Plot the query and top-k results with their metrics for qualitative assessment.
 
-3. **Feature Precision**: 
-   - Percentage of retrieved images exceeding a similarity threshold.
+#### Example code:
+```python
+def print_similarity_stats(angular_distances, cosine_similarities, model_name="Model"):
+    print(f"{model_name} Similarity Statistics:")
+    print(f"  Average Angular Distance: {np.mean(angular_distances):.4f}")
+    print(f"  Std Dev Angular Distance: {np.std(angular_distances):.4f}")
+    print(f"  Average Cosine Similarity: {np.mean(cosine_similarities):.4f}")
+    print(f"  Std Dev Cosine Similarity: {np.std(cosine_similarities):.4f}")
+```
 
-### Combined Metrics
+---
 
-- A **weighted combination** of title-based and visual similarity scores is used to get a more holistic evaluation.
+## Interpretation
 
-### Evaluation Process
+- **Lower angular distance** and **higher cosine similarity** indicate better retrieval (images are more similar in feature space).
+- **Lower standard deviation** means results are more consistent.
 
-The evaluation process consists of:
-1. **Feature Similarity Metrics**: Measures similarity between query and retrieved images based on extracted features.
-2. **Visual Similarity Evaluation**: Computes the **mean similarity** and **feature precision** from a sample of images.
-3. **Quality Metric Calculation**: The **Quality Metric** is computed to assess the overall retrieval quality.
+**Why?**  
+Cosine similarity measures alignment of feature vectors (1 = identical), angular distance is a normalized dissimilarity (0 = identical).  
+See [Wikipedia: Cosine Similarity](https://en.wikipedia.org/wiki/Cosine_similarity).
 
-### Quality Metric Formula
+---
 
-The **Quality Metric** formula is inspired by the paper:
+## Limitations
 
-**"A Deep Learning Approach for Painting Retrieval based on Genre Similarity"** by Tess Masclef, Mihaela Scuturici, Benjamin Bertin, Vincent Barrellon, Vasile-Marian Scuturici, and Serge Miguet.
-
-The formula is:
-
-**Quality Metric = k / (n * k_approximate)**
-
-Where:
-- **k** = Number of relevant results retrieved.
-- **n** = Total number of retrieved images.
-- **k_approximate** = Approximate number of relevant results.
-
-This metric helps evaluate the overall retrieval quality by considering the number of relevant images retrieved and their approximate relevance.
+- **No genre-based quantitative evaluation:** The NGA dataset does not contain detailed genre/style labels. Precision@k by genre, as in the original paper, cannot be computed.
+- **Evaluation is "label-free":** Assessment is based on feature-space distances and visual relevance, not genre.
 
 ---
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
