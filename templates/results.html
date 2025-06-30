@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Results - Painting Similarity</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 32px 40px 40px 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        }
+        h2 {
+            color: #222;
+            margin-bottom: 28px;
+            text-align: center;
+        }
+        .row {
+            display: flex;
+            gap: 32px;
+            justify-content: center;
+        }
+        .img-block {
+            text-align: center;
+            background: #fafafa;
+            border-radius: 8px;
+            padding: 18px 12px 12px 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .img-block img {
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 10px;
+        }
+        .metrics {
+            font-size: 15px;
+            color: #444;
+        }
+        .back-link {
+            display: block;
+            margin: 32px auto 0 auto;
+            text-align: center;
+            color: #2d7ff9;
+            text-decoration: none;
+            font-size: 17px;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Top 3 Similar Paintings For Your Query Painting</h2>
+        <div class="row">
+            {% for r in results %}
+            <div class="img-block">
+                <img src="{{ url_for('static', filename=r.img) }}" width="260"><br>
+                <div class="metrics">
+                    Angular Distance: {{ "%.3f"|format(r.ang_dist) }}<br>
+                    Cosine Similarity: {{ "%.3f"|format(r.cos_sim) }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <a href="/" class="back-link">Try another image</a>
+    </div>
+</body>
+</html>

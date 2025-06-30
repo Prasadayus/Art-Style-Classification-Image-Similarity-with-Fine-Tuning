@@ -1,0 +1,34 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.so
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Spyder project settings
+.spyproject/
+
+# Model and large data files
+*.keras
+*.h5
+*.npy
+*.ann
+
+# Data outputs and intermediate files
+*.csv
+*.tsv
+
+# Uploaded images and generated files
+static/uploads/
+static/images/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.venv/
+env/
+venv/
