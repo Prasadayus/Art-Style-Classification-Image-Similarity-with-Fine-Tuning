@@ -1,4 +1,4 @@
-# Art-Style-Classification-Image-Similarity-with-Fine-Tuning
+# Art Similarity Finder: Deep Learning-Powered Painting Retrieval
 
 ## Overview
 This project is an implementation of the research paper  
