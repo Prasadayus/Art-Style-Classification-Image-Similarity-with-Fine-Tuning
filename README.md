@@ -22,7 +22,9 @@ This project includes a **Flask-based web application** for interactive painting
 
 Below is a sample screenshot of the web app in action:
 
-![Web App Screenshot](path/to/your/screenshot.png)
+![Screenshot 2025-06-30 192553](https://github.com/user-attachments/assets/680b6d04-ae5f-480f-b642-90824a287129)
+![Screenshot 2025-06-30 192816](https://github.com/user-attachments/assets/544da828-8310-449d-b4f4-7d6fcfa0a667)
+
 
 You can use this web interface for quick, visual exploration of painting similarities.
 
