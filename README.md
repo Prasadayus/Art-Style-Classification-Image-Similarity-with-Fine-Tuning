@@ -10,6 +10,24 @@ With the rapid digitization of art collections, there is a growing need for auto
 
 ---
 
+## Web Application (Flask)
+
+This project includes a **Flask-based web application** for interactive painting similarity search:
+
+- **Upload a painting** using a simple web interface.
+- The app extracts features from your uploaded image using both ResNet50 and EfficientNet models (preloaded for fast response).
+- It performs a fast similarity search using the Annoy index and retrieves the top visually similar paintings from the NGA dataset.
+- The app automatically selects the best model for your query based on similarity metrics and displays the top results with their angular distance and cosine similarity.
+- Results are shown in a clean, user-friendly layout with side-by-side images and similarity scores.
+
+Below is a sample screenshot of the web app in action:
+
+![Web App Screenshot](path/to/your/screenshot.png)
+
+You can use this web interface for quick, visual exploration of painting similarities.
+
+---
+
 ## Core Methodology
 
 The project follows a robust transfer learning approach for image retrieval in the artistic domain:
